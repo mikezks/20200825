@@ -31,7 +31,8 @@
       ],
       "@flight-workspace/check-in/feature-manage": [
         "libs/check-in/feature-manage/src/index.ts"
-      ]
+      ],
+      "@flight-workspace/luggage/ui-card": ["libs/luggage/ui-card/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

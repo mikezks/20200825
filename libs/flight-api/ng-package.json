@@ -3,6 +3,6 @@
   "dest": "../../dist/flight-api",
   "deleteDestPath": false,
   "lib": {
-    "entryFile": "src/public_api.ts"
+    "entryFile": "src/index.ts"
   }
 }

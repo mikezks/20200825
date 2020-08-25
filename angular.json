@@ -520,6 +520,20 @@
       "sourceRoot": "libs/flight-api/src",
       "prefix": "flight-workspace",
       "architect": {
+
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/flight-api/tsconfig.lib.json",
+            "project": "libs/flight-api/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/flight-api/tsconfig.lib.prod.json"
+            }
+          }
+        },
+
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -1014,6 +1028,46 @@
           "style": "scss"
         }
       }
+    },
+    "luggage-ui-card": {
+      "projectType": "library",
+      "root": "libs/luggage/ui-card",
+      "sourceRoot": "libs/luggage/ui-card/src",
+      "prefix": "flight-workspace",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/luggage/ui-card/tsconfig.lib.json",
+            "project": "libs/luggage/ui-card/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/luggage/ui-card/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/luggage/ui-card/tsconfig.lib.json",
+              "libs/luggage/ui-card/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/luggage/ui-card/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/luggage/ui-card/jest.config.js",
+            "tsConfig": "libs/luggage/ui-card/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/luggage/ui-card/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {}
     }
   },
   "cli": {

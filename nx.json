@@ -27,13 +27,13 @@
       "tags": ["domain:flights"]
     },
     "flight-api": {
-      "tags": ["domain:flights"]
+      "tags": ["domain:flights", "type:domain-logic"]
     },
     "dashboard": {
       "tags": ["domain:dashboard"]
     },
     "dashboard-api": {
-      "tags": ["domain:dashboard"]
+      "tags": ["domain:dashboard", "type:domain-logic"]
     },
     "external": {
       "tags": ["domain:external"]
@@ -69,6 +69,9 @@
     },
     "check-in-feature-manage": {
       "tags": ["domain:check-in", "type:feature"]
+    },
+    "luggage-ui-card": {
+      "tags": []
     }
   },
   "tasksRunnerOptions": {
