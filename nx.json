@@ -40,6 +40,35 @@
     },
     "logger-lib": {
       "tags": ["domain:shared"]
+    },
+    "luggage-domain": {
+      "tags": ["domain:luggage", "type:domain-logic"]
+    },
+    "luggage": {
+      "tags": ["domain:luggage", "type:app"]
+    },
+    "luggage-e2e": {
+      "tags": [],
+      "implicitDependencies": ["luggage"]
+    },
+    "luggage-feature-check-in": {
+      "tags": ["domain:luggage", "type:feature"]
+    },
+    "luggage-feature-report-loss": {
+      "tags": ["domain:luggage", "type:feature"]
+    },
+    "check-in-domain": {
+      "tags": ["domain:check-in", "type:domain-logic"]
+    },
+    "check-in": {
+      "tags": ["domain:check-in", "type:app"]
+    },
+    "check-in-e2e": {
+      "tags": [],
+      "implicitDependencies": ["check-in"]
+    },
+    "check-in-feature-manage": {
+      "tags": ["domain:check-in", "type:feature"]
     }
   },
   "tasksRunnerOptions": {

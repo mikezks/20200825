@@ -18,7 +18,20 @@
     "paths": {
       "@flight-workspace/logger-lib": ["libs/logger-lib/src/index.ts"],
       "@flight-workspace/dashboard-api": ["libs/dashboard-api/src/index.ts"],
-      "@flight-workspace/flight-api": ["libs/flight-api/src/index.ts"]
+      "@flight-workspace/flight-api": ["libs/flight-api/src/index.ts"],
+      "@flight-workspace/luggage/domain": ["libs/luggage/domain/src/index.ts"],
+      "@flight-workspace/luggage/feature-check-in": [
+        "libs/luggage/feature-check-in/src/index.ts"
+      ],
+      "@flight-workspace/luggage/feature-report-loss": [
+        "libs/luggage/feature-report-loss/src/index.ts"
+      ],
+      "@flight-workspace/check-in/domain": [
+        "libs/check-in/domain/src/index.ts"
+      ],
+      "@flight-workspace/check-in/feature-manage": [
+        "libs/check-in/feature-manage/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
