@@ -5,6 +5,7 @@ import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import * as fromFlightBooking from '../+state/flight-booking.actions';
 import { take, tap } from 'rxjs/operators';
+import { selectFlights } from '../+state/flight-booking.selectors';
 
 @Component({
   selector: 'flight-search',
@@ -36,7 +37,7 @@ export class FlightSearchComponent implements OnInit {
 
   ngOnInit() {
     this.flights$ = this.store.pipe(
-      select(state => state.flightBooking.flights)
+      select(selectFlights)
     );
   }
 
@@ -46,11 +47,13 @@ export class FlightSearchComponent implements OnInit {
     /* this.flightService
       .load(this.from, this.to, this.urgent); */
 
-    this.flightService
+    /* this.flightService
       .find(this.from, this.to)
       .subscribe(
         flights => this.store.dispatch(fromFlightBooking.flightsLoaded({ flights }))
-      );
+      ); */
+
+    this.store.dispatch(fromFlightBooking.flightsLoad({ from: this.from, to: this.to }));
   }
 
   delay(): void {

@@ -4,3 +4,10 @@ import * as fromFlightBooking from './flight-booking.reducer';
 export const selectFlightBookingState = createFeatureSelector<fromFlightBooking.State>(
   fromFlightBooking.flightBookingFeatureKey
 );
+
+export const selectFlights = createSelector(
+  // Selectors
+  selectFlightBookingState,
+  // Projector
+  (flightBookingState) => flightBookingState.flights
+);
