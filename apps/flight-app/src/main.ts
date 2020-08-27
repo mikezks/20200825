@@ -8,8 +8,9 @@ if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule);
-
+platformBrowserDynamic().bootstrapModule(AppModule, 
+  // { ngZone: (window as any).ngZone}
+);
 
 
 

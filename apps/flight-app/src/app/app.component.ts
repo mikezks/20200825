@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, NgZone} from '@angular/core';
 
 @Component({
   selector: 'flight-app',
@@ -6,7 +6,8 @@ import {Component} from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor() { 
+  constructor(private ngZone: NgZone) {
+    (window as any).ngZone = ngZone; 
   }
 }
 

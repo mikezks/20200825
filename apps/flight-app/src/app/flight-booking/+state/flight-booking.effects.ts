@@ -16,7 +16,7 @@ export class FlightBookingEffects {
       ofType(FlightBookingActions.flightsLoad),
       switchMap(a => this.flightSerrvice.find(a.from, a.to)),
       map(flights => FlightBookingActions.flightsLoaded({ flights })),
-      catchError(err => of([]))
+      //catchError(err => of(errorAction([])))
     );
   });
 

@@ -3,7 +3,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
-import { RouterModule } from "@angular/router";
+import { RouterModule, PreloadAllModules } from "@angular/router";
 import { FlightApiModule } from "@flight-workspace/flight-api";
 
 import { AppComponent } from "./app.component";
@@ -19,19 +19,26 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducers, metaReducers } from './+state';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FlightLookaheadComponent } from './flight-lookahead/flight-lookahead.component';
 
 @NgModule({
   imports: [
     BrowserModule,
     HttpClientModule,
-    FlightBookingModule,
+
+    // FlightBookingModule, // would prevent lazy loading
 
     BrowserAnimationsModule,
     FlightCancellingModule,
 
+    ReactiveFormsModule,
+
     FlightApiModule.forRoot(),
     SharedModule.forRoot(),
-    RouterModule.forRoot(APP_ROUTES),
+    RouterModule.forRoot(APP_ROUTES, {
+      preloadingStrategy: PreloadAllModules
+    }),
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot([]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
@@ -41,9 +48,11 @@ import { environment } from '../environments/environment';
     SidebarComponent,
     NavbarComponent,
     HomeComponent,
-    BasketComponent
+    BasketComponent,
+    FlightLookaheadComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
+
