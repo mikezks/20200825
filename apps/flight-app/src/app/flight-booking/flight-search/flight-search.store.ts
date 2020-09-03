@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { ComponentStore } from '@ngrx/component-store';
 import { Observable } from 'rxjs';
-import { tap, switchMap, take } from 'rxjs/operators';
+import { tap, switchMap, take, withLatestFrom } from 'rxjs/operators';
 
 import produce from "immer";
 
@@ -103,8 +103,7 @@ export class FlightSearchStore extends ComponentStore<FlightSearchState> {
           this.store.dispatch(
             fromFlightBooking.flightUpdate({
               flight: produce(payload.flight, flight => {
-                const date = new Date(flight.date).getTime() + 1000 * 60 * payload.addTimeMin;
-                flight.date = new Date(date).toISOString();
+                flight.date = changeIsoDate(flight.date, 15)
               })
             })
           )
@@ -116,10 +115,8 @@ export class FlightSearchStore extends ComponentStore<FlightSearchState> {
   readonly delayFirstFlightBy15Min = this.effect(
     (trigger$: Observable<void>) =>
       trigger$.pipe(
-        switchMap(_ => this.firstFlight$.pipe(take(1))),
-        tap((flight: Flight) =>
-          this.delayFlight({ flight, addTimeMin: 15 })
-        )
+        withLatestFrom(this.firstFlight$),
+        tap(([_, flight]) => this.delayFlight({ flight, addTimeMin: 15 }))
       )
   );
 
@@ -154,7 +151,8 @@ export class FlightSearchStore extends ComponentStore<FlightSearchState> {
   readonly updateFilterByForm = (searchFilter$: Observable<FlightSearchFilter>) => this.effect(
     ($trigger: Observable<void>) =>
       $trigger.pipe(
-        tap(_ => this.updateFilter(searchFilter$.pipe(take(1))))
+        withLatestFrom(searchFilter$),
+        tap(([_, searchFilter]) => this.updateFilter(searchFilter))
       )
   );
 
@@ -164,3 +162,11 @@ export class FlightSearchStore extends ComponentStore<FlightSearchState> {
     super(initialState);
   }
 }
+
+
+
+export const changeIsoDate = (isoDate: string, addTimeMin: number) =>
+  new Date(
+    new Date(isoDate).getTime() +
+    1000 * 60 * addTimeMin
+  ).toISOString();
