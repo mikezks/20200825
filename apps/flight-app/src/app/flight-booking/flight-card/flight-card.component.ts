@@ -54,8 +54,8 @@ export class FlightCardComponent implements OnInit, OnChanges, OnDestroy {
 
     this.zone.runOutsideAngular(() => {
       setTimeout(() => {
-        this.element.nativeElement.firstChild.style.backgroundColor = 'white';
-      }, 1000);
+        this.element.nativeElement.firstChild.style.backgroundColor = (this.selected) ?  'rgb(204, 197, 185)' : 'white';
+      }, 200);
     });
 
     return null;
