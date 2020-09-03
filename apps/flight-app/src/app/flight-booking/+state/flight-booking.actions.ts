@@ -3,7 +3,7 @@ import { Flight } from '@flight-workspace/flight-api';
 
 export const flightsLoad = createAction(
   '[FlightBooking] Flights load',
-  props<{ from: string, to: string }>()
+  props<{ from: string, to: string, urgent?: boolean }>()
 );
 
 export const flightsLoaded = createAction(

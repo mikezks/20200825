@@ -20,7 +20,11 @@ export const reducer = createReducer(
   initialState,
 
   on(FlightBookingActions.flightsLoaded, (state, action) => {
-    const flights = action.flights;
+    // Build-up a cache
+    const flights = [ ...state.flights.filter(f =>
+      f.from !== action.flights[0].from &&
+      f.to !== action.flights[0].to
+    ), ...action.flights ];
     return { ...state, flights };
   }),
 
