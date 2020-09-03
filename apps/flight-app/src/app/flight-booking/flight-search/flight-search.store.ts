@@ -22,13 +22,11 @@ export interface FlightSearchFilter {
 export interface FlightSearchState {
   filter: FlightSearchFilter;
   basket: { [key: string]: boolean };
-  counter: number;
 }
 
 const initalState = {
   filter: { from: 'Hamburg', to: 'Graz' },
-  basket: { '3': true, '5': true },
-  counter: 0
+  basket: { '3': true, '5': true }
 };
 
 
@@ -66,16 +64,11 @@ export class FlightSearchStore extends ComponentStore<FlightSearchState> {
     state => state.basket
   );
 
-  private readonly counter$ = this.select(
-    state => state.counter
-  );
-
   // Custom State slice to be used in the Template
   readonly componentState$ = this.select(
     this.flights$,
     this.basket$,
-    this.counter$,
-    (flights, basket, counter) => ({ flights, basket, counter })
+    (flights, basket) => ({ flights, basket })
   );
 
 
@@ -94,13 +87,6 @@ export class FlightSearchStore extends ComponentStore<FlightSearchState> {
     (state, basket: { id: string, selected: boolean }) => ({
       ...state,
       basket: { ...state.basket, [basket.id]: basket.selected }
-    })
-  );
-
-  readonly updateCounter = this.updater(
-    (state, i: number) => ({
-      ...state,
-      counter: i
     })
   );
 
@@ -139,8 +125,6 @@ export class FlightSearchStore extends ComponentStore<FlightSearchState> {
 
   // Effect triggers automatically on Local Filter State changes to load new Flights via Global State Management
   private readonly loadflights = this.effect(
-    /* (filter$: Observable<FlightSearchFilter>) =>
-      filter$.pipe( */
     () =>
       this.filter$.pipe(
         tap((searchFilter: FlightSearchFilter) =>
@@ -154,19 +138,6 @@ export class FlightSearchStore extends ComponentStore<FlightSearchState> {
         )
       )
   );
-
-  // Alternative to trigger an Effect and an Updater
-  /* readonly setFilter = this.effect(
-    (filter$: Observable<FlightSearchFilter>) =>
-      filter$.pipe(
-        tap((searchFilter: FlightSearchFilter) =>
-          this.loadflights(searchFilter)
-        ),
-        tap((searchFilter: FlightSearchFilter) =>
-          this.updateFilter(searchFilter)
-        )
-      )
-  ); */
 
   // Update RX Forms based on a Local State change via Observable Selector w/o direct Subscription
   readonly updateForm = this.effect(

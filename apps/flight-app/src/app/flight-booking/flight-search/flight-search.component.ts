@@ -37,28 +37,5 @@ export class FlightSearchComponent {
     );
 
     this.updateFilterByForm = this.componentStore.updateFilterByForm(this.formChanges$);
-
-    // Connecting Observables directly to Updaters results in parallel updates.
-    // The second Updater call with a new Observable does not complete the first Observable.
-    this.componentStore.updateCounter
-      (timer(2000, 2000).pipe(map(i => 100 + i))
-    );
-    this.componentStore.updateCounter(
-      timer(3000, 2000).pipe(map(i => 200 + i))
-    );
   }
-
-  // Can be replaced by triggering an Effect in the Template directly
-  //search(): void {
-    // Local Filter State change triggers Flight load process as Effect.
-    // This leads to an inital data load.
-    /* this.componentStore.updateFilter(
-      this.formChanges$.pipe(take(1))
-    ); */
-
-    // Alternative to trigger an Effect and an Updater
-    /* this.componentStore.setFilter(
-      this.formChanges$.pipe(take(1))
-    ); */
-  //}
 }
