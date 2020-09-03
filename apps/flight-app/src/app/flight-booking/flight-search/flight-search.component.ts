@@ -2,15 +2,17 @@ import {Component, OnInit} from '@angular/core';
 import {FlightService, Flight} from '@flight-workspace/flight-api';
 import { FlightBookingAppState } from '../+state/flight-booking.reducer';
 import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, timer } from 'rxjs';
 import * as fromFlightBooking from '../+state/flight-booking.actions';
-import { take, tap } from 'rxjs/operators';
+import { take, tap, map } from 'rxjs/operators';
 import { selectFlights } from '../+state/flight-booking.selectors';
+import { FlightSearchStore } from './flight-search.store';
 
 @Component({
   selector: 'flight-search',
   templateUrl: './flight-search.component.html',
-  styleUrls: ['./flight-search.component.css']
+  styleUrls: ['./flight-search.component.css'],
+  providers: [ FlightSearchStore ]
 })
 export class FlightSearchComponent implements OnInit {
 
@@ -32,7 +34,17 @@ export class FlightSearchComponent implements OnInit {
 
   constructor(
     private flightService: FlightService,
-    private store: Store<FlightBookingAppState>) {
+    private store: Store<FlightBookingAppState>,
+    public componentStore: FlightSearchStore) {
+
+    // Connecting Observables directly to Updaters results in parallel updates.
+    // The second Updater call with a new Observable does not complete the first Observable.
+    this.componentStore.updateCounter
+      (timer(2000, 2000).pipe(map(i => 100 + i))
+    );
+    this.componentStore.updateCounter(
+      timer(3000, 2000).pipe(map(i => 200 + i))
+    );
   }
 
   ngOnInit() {

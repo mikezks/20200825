@@ -1,9 +1,10 @@
+<ng-container *ngrxLet="componentStore.componentState$ as state">
 <ng-container *ngIf="{ flights: flights$ | async } as componentData">
 
   <div class="card">
 
     <div class="header">
-      <h2 class="title">Flight Search</h2>
+      <h2 class="title">Flight Search ({{ state.counter }})</h2>
     </div>
     <div class="content">
 
@@ -64,4 +65,5 @@
     </div>
   </div>
 
+</ng-container>
 </ng-container>
