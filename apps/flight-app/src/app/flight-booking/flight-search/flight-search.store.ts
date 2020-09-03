@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { ComponentStore } from '@ngrx/component-store';
 import { Observable } from 'rxjs';
-import { tap, switchMap, take, map } from 'rxjs/operators';
+import { tap, switchMap, take } from 'rxjs/operators';
 
 import produce from "immer";
 
@@ -24,7 +24,7 @@ export interface FlightSearchState {
   basket: { [key: string]: boolean };
 }
 
-const initalState = {
+const initialState = {
   filter: { from: 'Hamburg', to: 'Graz' },
   basket: { '3': true, '5': true }
 };
@@ -124,9 +124,8 @@ export class FlightSearchStore extends ComponentStore<FlightSearchState> {
   );
 
   // Effect triggers automatically on Local Filter State changes to load new Flights via Global State Management
-  private readonly loadflights = this.effect(
-    () =>
-      this.filter$.pipe(
+  private readonly loadflights = this.effect(() =>
+    this.filter$.pipe(
         tap((searchFilter: FlightSearchFilter) =>
           this.store.dispatch(
             fromFlightBooking.flightsLoad({
@@ -143,27 +142,25 @@ export class FlightSearchStore extends ComponentStore<FlightSearchState> {
   readonly updateForm = this.effect(
     (patchValueFn$: Observable<typeof FormGroup.prototype.patchValue>) =>
       patchValueFn$.pipe(
-        switchMap(patchValueFn =>
-          this.filter$.pipe(
-            tap(searchFilter =>
-              patchValueFn(searchFilter)
-            )
+        switchMap(patchValueFn => this.filter$.pipe(
+          tap(searchFilter =>
+            patchValueFn(searchFilter)
           )
-        )
+        ))
       )
   );
 
   // Factory that returns an Effect to automatically update the Local Filter State once, based on the current RX Forms State
   readonly updateFilterByForm = (searchFilter$: Observable<FlightSearchFilter>) => this.effect(
-    ($trigger: Observable<FlightSearchFilter>) =>
+    ($trigger: Observable<void>) =>
       $trigger.pipe(
-        map(searchFilter => this.updateFilter(searchFilter$.pipe(take(1))))
+        tap(_ => this.updateFilter(searchFilter$.pipe(take(1))))
       )
   );
 
 
 
   constructor(private store: Store<fromFlightBooking.FlightBookingAppState>) {
-    super(initalState);
+    super(initialState);
   }
 }

@@ -14,7 +14,7 @@ import { FlightSearchStore, FlightSearchFilter } from './flight-search.store';
 export class FlightSearchComponent {
   searchForm: FormGroup;
   formChanges$: ConnectableObservable<FlightSearchFilter>;
-  updateFilterByForm: (o$: Observable<FlightSearchFilter>) => Subscription;
+  updateFilterByForm: (o$: Observable<FlightSearchFilter>) => void;
 
   constructor(
     public componentStore: FlightSearchStore,
