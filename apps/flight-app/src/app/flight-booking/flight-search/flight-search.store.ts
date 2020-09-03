@@ -182,6 +182,14 @@ export class FlightSearchStore extends ComponentStore<FlightSearchState> {
       )
   );
 
+  // Factory that returns an Effect to automatically update the Local Filter State once, based on the current RX Forms State
+  readonly updateFilterByForm = (searchFilter$: Observable<FlightSearchFilter>) => this.effect(
+    ($trigger: Observable<FlightSearchFilter>) =>
+      $trigger.pipe(
+        map(searchFilter => this.updateFilter(searchFilter$.pipe(take(1))))
+      )
+  );
+
 
 
   constructor(private store: Store<fromFlightBooking.FlightBookingAppState>) {

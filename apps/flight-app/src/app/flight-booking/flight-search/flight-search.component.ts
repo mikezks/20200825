@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConnectableObservable, timer } from 'rxjs';
-import { publishReplay, map, take } from 'rxjs/operators';
+import { ConnectableObservable, Observable, Subscription, timer } from 'rxjs';
+import { publishReplay, map } from 'rxjs/operators';
 
 import { FlightSearchStore, FlightSearchFilter } from './flight-search.store';
 
@@ -14,6 +14,7 @@ import { FlightSearchStore, FlightSearchFilter } from './flight-search.store';
 export class FlightSearchComponent {
   searchForm: FormGroup;
   formChanges$: ConnectableObservable<FlightSearchFilter>;
+  updateFilterByForm: (o$: Observable<FlightSearchFilter>) => Subscription;
 
   constructor(
     public componentStore: FlightSearchStore,
@@ -35,6 +36,8 @@ export class FlightSearchComponent {
       this.searchForm.patchValue.bind(this.searchForm)
     );
 
+    this.updateFilterByForm = this.componentStore.updateFilterByForm(this.formChanges$);
+
     // Connecting Observables directly to Updaters results in parallel updates.
     // The second Updater call with a new Observable does not complete the first Observable.
     this.componentStore.updateCounter
@@ -45,16 +48,17 @@ export class FlightSearchComponent {
     );
   }
 
-  search(): void {
+  // Can be replaced by triggering an Effect in the Template directly
+  //search(): void {
     // Local Filter State change triggers Flight load process as Effect.
-    // This leads to an inital data load
-    this.componentStore.updateFilter(
+    // This leads to an inital data load.
+    /* this.componentStore.updateFilter(
       this.formChanges$.pipe(take(1))
-    );
+    ); */
 
-    // Alternative to trigger an Effect and an Updater.
+    // Alternative to trigger an Effect and an Updater
     /* this.componentStore.setFilter(
       this.formChanges$.pipe(take(1))
     ); */
-  }
+  //}
 }
