@@ -1,5 +1,4 @@
 <ng-container *ngrxLet="componentStore.componentState$ as state">
-<ng-container *ngIf="{ flights: flights$ | async } as componentData">
 
   <div class="card">
 
@@ -8,37 +7,37 @@
     </div>
     <div class="content">
 
-      <form>
+      <form [formGroup]="searchForm" (ngSubmit)="search()">
 
         <div class="form-group">
           <label>From:</label>
-          <input [(ngModel)]="from" name="from" class="form-control">
+          <input formControlName="from" class="form-control">
         </div>
         <div class="form-group">
           <label>To:</label>
-          <input [(ngModel)]="to" name="to" class="form-control">
+          <input formControlName="to" class="form-control">
         </div>
         <div class="form-group">
           <label>
-            <input [(ngModel)]="urgent" name="urgent" type="checkbox">
+            <input formControlName="urgent" type="checkbox">
             Urgent (When it's urgent it fails -- like in real life ;-))
 
           </label>
         </div>
 
         <div class="form-group">
-          <button (click)="search()" [disabled]="!from || !to"
+          <button type="submit" [disabled]="!searchForm.valid"
             class="btn btn-default">
             Search
           </button>
 
-          <button *ngIf="componentData.flights.length > 0" class="btn btn-default"
-            (click)="delay()">
+          <button type="button" *ngIf="state.flights.length > 0" class="btn btn-default"
+            (click)="componentStore.delayFirstFlightBy15Min()">
             Delay 1st Flight
           </button>
 
-          <div *ngIf="componentData.flights.length > 0">
-            {{componentData.flights.length}} flights found!
+          <div *ngIf="state.flights.length > 0">
+            {{ state.flights.length }} flights found!
           </div>
 
         </div>
@@ -48,12 +47,13 @@
   </div>
 
   <div class="row">
-    <div *ngFor="let f of componentData.flights">
+    <div *ngFor="let f of state.flights">
 
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
         <flight-card
           [item]="f"
-          [(selected)]="basket[f.id]">
+          [selected]="state.basket[f.id]"
+          (selectedChange)="componentStore.updateBasket({ id: f.id, selected: $event })">
         </flight-card>
       </div>
     </div>
@@ -61,9 +61,8 @@
 
   <div class="card">
     <div class="content">
-      <pre>{{ basket | json }}</pre>
+      <pre>{{ state.basket | json }}</pre>
     </div>
   </div>
 
-</ng-container>
 </ng-container>
