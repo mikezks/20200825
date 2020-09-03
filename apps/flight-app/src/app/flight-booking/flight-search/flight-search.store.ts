@@ -137,10 +137,12 @@ export class FlightSearchStore extends ComponentStore<FlightSearchState> {
       )
   );
 
-  // Effect loads new Flights via Global State Management
+  // Effect triggers automatically on Local Filter State changes to load new Flights via Global State Management
   private readonly loadflights = this.effect(
-    (filter$: Observable<FlightSearchFilter>) =>
-      filter$.pipe(
+    /* (filter$: Observable<FlightSearchFilter>) =>
+      filter$.pipe( */
+    () =>
+      this.filter$.pipe(
         tap((searchFilter: FlightSearchFilter) =>
           this.store.dispatch(
             fromFlightBooking.flightsLoad({
@@ -153,8 +155,8 @@ export class FlightSearchStore extends ComponentStore<FlightSearchState> {
       )
   );
 
-  // Trigger an Effect and an Updater
-  readonly setFilter = this.effect(
+  // Alternative to trigger an Effect and an Updater
+  /* readonly setFilter = this.effect(
     (filter$: Observable<FlightSearchFilter>) =>
       filter$.pipe(
         tap((searchFilter: FlightSearchFilter) =>
@@ -164,7 +166,7 @@ export class FlightSearchStore extends ComponentStore<FlightSearchState> {
           this.updateFilter(searchFilter)
         )
       )
-  );
+  ); */
 
   // Update RX Forms based on a Local State change via Observable Selector w/o direct Subscription
   readonly updateForm = this.effect(
@@ -177,14 +179,6 @@ export class FlightSearchStore extends ComponentStore<FlightSearchState> {
             )
           )
         )
-      )
-  );
-
-  // Factory that returns an Effect to automatically update the Local Filter State once, based on the current RX Forms State
-  readonly updateFilterByForm = (searchFilter$: Observable<FlightSearchFilter>) => this.effect(
-    ($trigger: Observable<FlightSearchFilter>) =>
-      $trigger.pipe(
-        map(searchFilter => this.updateFilter(searchFilter$.pipe(take(1))))
       )
   );
 

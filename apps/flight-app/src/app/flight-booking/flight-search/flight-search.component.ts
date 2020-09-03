@@ -46,9 +46,15 @@ export class FlightSearchComponent {
   }
 
   search(): void {
-    // Trigger and Effect and an Updater
-    this.componentStore.setFilter(
+    // Local Filter State change triggers Flight load process as Effect.
+    // This leads to an inital data load
+    this.componentStore.updateFilter(
       this.formChanges$.pipe(take(1))
     );
+
+    // Alternative to trigger an Effect and an Updater.
+    /* this.componentStore.setFilter(
+      this.formChanges$.pipe(take(1))
+    ); */
   }
 }
